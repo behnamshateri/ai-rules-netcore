@@ -6,6 +6,21 @@ This file provides guidance to use any AI agaent when working with code in this 
 - Test: `dotnet test` (includes unit/acceptance tests per test project structure)
 - Run tests directly: Use `dotnet test <test-project>` (e.g., `dotnet test WebApi.Tests`)
 
+## Modern C# Rules
+
+- Prefer modern C# language features over older syntax when supported
+- Use the most concise and readable syntax available in the current .NET/C# version
+- Refactor outdated syntax to modern alternatives in modified code when it improves readability
+- Avoid unnecessary verbose syntax
+
+## Formatting Rules
+
+- Files MUST NOT contain trailing whitespace
+- Remove trailing spaces from all modified lines before completing the task
+- Preserve consistent file formatting and indentation
+- Do not introduce unnecessary blank lines
+- Ensure edited files end with a single newline
+
 ## Code Architecture Overview
 1. **Core Modules**
    - `WebApi`: Primary API handling dispensation logic, including third-party integrations (Vektis, DAC)
@@ -29,6 +44,30 @@ This file provides guidance to use any AI agaent when working with code in this 
 - NEVER use real implementations of executors, repositories, or services
 - Verify only one responsibility per test
 - Not depend on other tests or shared state
+- Mock fields in test classes MUST end with `Mock`
+- Mock field names MUST clearly describe the mocked dependency
+- Use underscore-prefixed private field naming convention
+  Examples:
+
+```csharp
+private IQueryHandler<GetPatientsActiveMandateOfOrganizationQuery, ICollection<Mandate>>
+    _getPatientsActiveMandateOfOrganizationQueryHandlerMock;
+
+private IObjectCreator<OrganizationPeopleContactInfo, OrganizationPeopleContactInfoCreatorInput>
+    _organizationPeopleContactInfoCreatorMock;
+
+private IAfasDebtorItemCreatorStrategy
+    _afasDebtorItemCreatorStrategyMock;
+```
+
+- If multiple mocks exist for the same dependency type, append numeric suffixes
+
+Example:
+
+```csharp
+private IService _serviceMock1;
+private IService _serviceMock2;
+```
 
 ## Compiler / Warning Policy
 - Files MUST NOT include unnecessary `using` statements.
