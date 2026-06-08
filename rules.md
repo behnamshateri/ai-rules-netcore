@@ -43,9 +43,9 @@ This file provides guidance to any agent when working with code in this reposito
 - Services.Impmentnation.Tests will be used for unit tests for Services.Impmentnation layer
 - Services.Entities.Tests will be used for unit tests for Services.Entities layer
 - One test file per class
-- Always use `EnumValidator.Validate(...)` for enum validation.
-- Do not use `Enum.IsDefined(...)` directly.
-- Unit tests for invalid enum values must verify `ValueNotSupportedException`.
+- Always use EnumValidator.Validate(...) for enum validation.
+- Do not use Enum.IsDefined(...) directly.
+- Unit tests for invalid enum values must verify ValueNotSupportedException.
 - Do NOT mix multiple classes in one test file
 - File name must exactly match the class name (case-sensitive) + "Tests", Test file names MUST follow this format:
   <ClassName>Tests
@@ -57,6 +57,9 @@ This file provides guidance to any agent when working with code in this reposito
 - Mock fields in test classes MUST end with `Mock`
 - Mock field names MUST clearly describe the mocked dependency
 - When writing chained method calls in C# tests, place each chained method on a new line.
+
+### Preferred
+
 ```csharp
 await _organizationsApiClientMock.DebtorCompaniesClient
     .Received(1)
@@ -162,8 +165,51 @@ HandleAsync_CommandIsValid_ExceptionShouldNotBeThrown
 - Prefer short code examples over long explanations
 - Avoid repeating information already present in the conversation
 
+### Large Output Protection
+Always prefer RTK-wrapped commands when available.
+Use:
+- rtk git status
+- rtk git diff
+- rtk git log
+- rtk grep
+- rtk find
+- rtk read
+- rtk pytest
+- rtk cargo test
+- rtk npm test
+- rtk npm run build
+- rtk go test
+- rtk dotnet test
+  instead of the raw commands.
+
+### Large Output Protection
+Never run commands that may produce large output directly.
+Examples:
+
+BAD:
+git diff
+git status
+find .
+grep -R
+npm test
+dotnet test
+
+GOOD:
+rtk git diff
+rtk git status
+rtk find .
+rtk grep ...
+rtk npm test
+rtk dotnet test
+
+### Fallback
+
+If RTK is unavailable, limit output size manually.
+Example:
+command 2>&1 | head -c 4000
+
 ## Skill routing (IMPORTANT)
 When a task matches one of these, load the skill:
 
 | Task            | Skill path                    |
-| Review a commit | `./skills/review-policy.md` |
+| Review a commit | `.ai/skills/review-policy.md` |
